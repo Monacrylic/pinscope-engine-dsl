@@ -77,9 +77,9 @@ pins:
     direction: bidirectional
     voltage:
       abs_min: -0.3
-      abs_max: expr: "VDDIO + 0.3"
+      abs_max: expr: "power.vddio.main + 0.3"
     rules:
-      - pull(up, VDDIO, <=10k)!
+      - pull(up, power.vddio.main, <=10k)!
     tags: [i2c_sda]
     description: I2C serial data
 
