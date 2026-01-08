@@ -1,0 +1,96 @@
+component: MPL3115A2
+category: Sensor
+
+packages:
+  lga8:
+    pins:
+      power.vdd.main: ["1"]
+      analog.cap.ref: ["2"]
+      power.gnd.ref: ["3"]
+      power.vddio.main: ["4"]
+      signal.int2.out: ["5"]
+      signal.int1.out: ["6"]
+      signal.i2c.sda: ["7"]
+      signal.i2c.scl: ["8"]
+
+pins:
+  power.vdd.main:
+    names: ["VDD"]
+    role: power
+    direction: input
+    voltage:
+      nominal: 3.3
+      abs_min: 1.95
+      abs_max: 3.6
+    rules:
+      - cap(0.1u)!
+    tags: [power]
+    description: VDD power supply connection
+
+  analog.cap.ref:
+    names: ["CAP"]
+    role: analog
+    direction: passive
+    rules:
+      - cap(0.1u)!
+    description: External capacitor reference pin
+
+  power.gnd.ref:
+    names: ["GND"]
+    role: ground
+    direction: passive
+    description: Ground
+
+  power.vddio.main:
+    names: ["VDDIO"]
+    role: power
+    direction: input
+    voltage:
+      nominal: 3.3
+      abs_min: 1.62
+      abs_max: 3.6
+    rules:
+      - cap(0.1u)!
+    description: Digital interface power supply
+
+  signal.int2.out:
+    names: ["INT2"]
+    role: io
+    direction: output
+    voltage:
+      abs_min: 0
+      abs_max: ref:power.vddio.main
+    description: Pressure interrupt 2
+
+  signal.int1.out:
+    names: ["INT1"]
+    role: io
+    direction: output
+    voltage:
+      abs_min: 0
+      abs_max: ref:power.vddio.main
+    description: Pressure interrupt 1
+
+  signal.i2c.sda:
+    names: ["SDA"]
+    role: io
+    direction: bidirectional
+    voltage:
+      abs_min: -0.3
+      abs_max: expr: "VDDIO + 0.3"
+    rules:
+      - pull(up, VDDIO, <=10k)!
+    tags: [i2c_sda]
+    description: I2C serial data
+
+  signal.i2c.scl:
+    names: ["SCL"]
+    role: io
+    direction: input
+    voltage:
+      abs_min: -0.3
+      abs_max: expr: "power.vddio.main + 0.3"
+    rules:
+      - pull(up, power.vddio.main, <=10k)!
+    tags: [i2c_scl]
+    description: I2C serial clock
