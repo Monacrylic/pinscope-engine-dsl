@@ -24,6 +24,7 @@ pins:
       abs_max: 3.6
     rules:
       - cap(0.1u)!
+      - cap(10u)!
     tags: [power]
     description: VDD power supply connection
 
